@@ -83,8 +83,8 @@ public class Utilities
         HashSet<Node> closedSet = new HashSet<>();
         Queue<Node> openSet = new LinkedList<>();
         openSet.add(start);
-        ArrayList<Node> al= new ArrayList<>();
 
+        System.out.println("Utilities::BFS(Node,Node) - Entering the loop");
         while (openSet.isEmpty() == false)
         {
             Node currentNode = openSet.poll();
@@ -95,18 +95,28 @@ public class Utilities
             if(currentNode == end)
                 return backtrackPath(currentNode);
 
+//            System.out.println("Utilities::BFS(Node,Node) - Passed initial checks");
             closedSet.add(currentNode);
             for(Node neighbor : currentNode.getNeighbors())
             {
-                if(closedSet.contains(neighbor) == false && EMPTY_SPACE==neighbor.getValue()||neighbor.getValue()==end.getValue())
+//                System.out.println("Utilities::BFS(Node,Node) - Has Neighbors");
+                if(closedSet.contains(neighbor) == false)
                 {
-                    System.out.println(neighbor.getValue()+" "+neighbor.getG()+" "+EMPTY_SPACE+" "+end.getValue());
-                    openSet.add(neighbor);
-                    neighbor.setParent(currentNode);
+                    if(EMPTY_SPACE == neighbor.getValue() || end.getValue() == neighbor.getValue())
+                    {
+                        if (neighbor.isChecked()!=true) {
+                            openSet.add(neighbor);
+                            if (openSet.size() == 1) {
+                                neighbor.setChecked(true);
+                            }
+                            neighbor.setParent(currentNode);
+                        }
+
+                    }
                 }
             }
         }
-        return al;
+        return null;
     }
     private static ArrayList<Node> backtrackPath(Node start) {
 

@@ -1,11 +1,16 @@
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 public class Path implements Iterable<Node>
 {
     //Stores the path data
     private ArrayList<Node> data;
+    // Hash for the paths and their respective color
+    public HashMap<Integer,ArrayList<Node>> paths=  new HashMap<Integer, ArrayList<Node>>();
+
+    HashMap<Path,Integer> allPath;
 
     //Construct an instance of path
     //start = the start of this path
@@ -14,8 +19,19 @@ public class Path implements Iterable<Node>
     {
         //Constructs the path - provided the start and end nodes
         data = Utilities.BFS(start, end);
+        paths.put(start.getValue(),data);
+//        System.out.println("Path::Path(Node,Node) - Completed path construction");
     }
+    public void findAllPaths(Grid grid){
+        Pairs pairs = new Pairs(grid,false);
+        Set<Integer> keys= pairs.getKeys();
+        for (Integer key:keys) {
+            Path allPaths =new Path(pairs.getStart(key),pairs.getEnd(key));
+            if (allPaths!=null) {
 
+            }
+        }
+    }
     //Does this path contain any nodes from another path
     public Node contains(Path path)
     {
@@ -30,12 +46,20 @@ public class Path implements Iterable<Node>
 
         return null;
     }
+
     public ArrayList<Node> getPath() {
-        return (ArrayList<Node>) Collections.unmodifiableList(data);
+        if(data == null)
+            return  null;
+        else
+            return data;
     }
-    public void setPath(Grid grid,Path path,Node current){
+    public void setPath(Grid grid,ArrayList<Node> path,Node current){
         for (Node c : path) {
-            Node node = (Node) c;
+            if (c==null){
+                return;
+            }
+            Node node = c;
+            current.setCompleted(true);
             grid.setValueAt(node.getX(), node.getY(), current.getValue());
         }
     }

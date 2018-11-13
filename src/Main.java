@@ -15,14 +15,16 @@ public class Main
         ArrayList<String> mapData = Utilities.readFile("test2.txt");
         ArrayList<Integer> colors = Utilities.getcolors(mapData);   //TODO: may be useful?
         Grid solvedState = new Grid(mapData);
-//        Testing **
-//        Pairs pairs = new Pairs(solvedState,false);
-//        Set<Integer> keys=pairs.getKeys();
-//        List<Integer> list=pairs.wallPath(solvedState);
-//        int key = list.get(0);
-//        Path path=new Path(pairs.getStart(key),pairs.getEnd(key));
+//        Testing
+        Pairs pairs = new Pairs(solvedState,false);
+        Set<Integer> keys=pairs.getKeys();
+        List<Integer> list=pairs.wallPath(solvedState);
+        int key = list.get(0);
+          Path path=new Path(pairs.getStart(key),pairs.getEnd(key));
 //        path.setPath(solvedState,path,pairs.getStart(key));
-//        solvedState.display();
+          path.findAllPaths(solvedState);
+        System.out.println(path.allPath.size());
+        solvedState.display();
 
         //A more efficient way to determine if solves...however, may make the code more difficult to understand...
         int filledCount = 0;
@@ -72,12 +74,16 @@ public class Main
                     }
 
                     //if only one possible move, then force the move
-                    if(possibleNumberOfMoves == 1)
+                    if(possibleNumberOfMoves == 1) {
                         forceMove(solvedState, currentNode, movement);
+                        solvedState.display();
+                    }
                     //TODO: else we need to perform another method of determining a move
 //                    else if(possibleNumberOfMoves!=1){
-//                        Utilities.BFS(currentNode,pairs.getEnd(pairs.getKey(keys,currentNode.getValue())));
-//                        solvedState.display();
+//                            Path path= new Path(currentNode,pairs.getEnd(currentNode.getValue()));
+                            ArrayList<Node> test=path.getPath();
+//                            path.setPath(solvedState,test,currentNode);
+                        solvedState.display();
 //                    }
                 }
 

@@ -26,13 +26,15 @@ public class DumbSolve implements SolveMethod{
             MazeNode currentNode = currentPath.getLastNode();
             int count = 0;
             letterPathDone:
-            while(count < 20) {
+            while(count<300) {
                 count++;
+                //If we find the endpoint, we finished this character
                 for (MazeNode mn : currentNode.getNeighbors()) {
                     if (mn.getxCoord() == currentPath.getEndNode().getxCoord() && mn.getyCoord() == currentPath.getEndNode().getyCoord()) {
                         break letterPathDone;
                     }
                 }
+                //If we dont, we pick a spot
                 for (MazeNode mn : currentNode.getNeighbors()) {
                     if (mn.getVal().equals('_')) {
                         currentPath.addNode(mn);
@@ -46,12 +48,9 @@ public class DumbSolve implements SolveMethod{
                             currentPath.removeLastNode();
                             maze_paths.get(replacing).undoRemove();
                             mn.setVal(mn.getLastVal());
-
                             System.out.println("Unsafe assignment, stepping back");
                         }
                         currentNode = currentPath.getLastNode();
-                        System.out.println("Condition true");
-
                     }
                 }
             }

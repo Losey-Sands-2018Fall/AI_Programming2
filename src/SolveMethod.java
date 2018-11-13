@@ -1,3 +1,3 @@
 public interface SolveMethod {
-    public String solve(Maze m);
+    public void solve(Maze m);
 }

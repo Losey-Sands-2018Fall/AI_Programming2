@@ -5,31 +5,99 @@ public class MazePath {
     private Character pathName;
     private MazeNode startNode;
     private MazeNode endNode;
+    private MazeNode lastRemoved;
+    private int lastRemovedIndex;
     public MazePath(Character pathName, MazeNode end, MazeNode start){
         startNode = start;
         endNode = end;
+        start.setProtected(true);
+        endNode.setProtected(true);
         this.pathName = pathName;
+        pathList = new ArrayList<>();
     }
+    public boolean canGetToEnd(){
+        MazeNode current = startNode;
+        for(MazeNode mn: pathList){
+            if(current.getxCoord()-1 == mn.getxCoord() ^ current.getyCoord() -1 == mn.getyCoord() ^ current.getyCoord() +1 == mn.getyCoord() ^ current.getxCoord()-1 == mn.getxCoord()) {
+                System.out.println("Valid");
+            }else if(current.getVal() != mn.getVal()){
+                System.out.println("Not the same letter");
+                return false;
+            }else{
+                System.out.println("Invalid");
+                return false;
+            }
+            current = mn;
+        }
+        //Checking connection to final node
+        if(pathList.size() > 0){
+            current = endNode;
+            MazeNode mn = pathList.get(pathList.size()-1);
+            if(current.getxCoord()-1 == mn.getxCoord() ^ current.getyCoord() -1 == mn.getyCoord() ^ current.getyCoord() +1 == mn.getyCoord() ^ current.getxCoord()-1 == mn.getxCoord()) {
+                System.out.println("Valid");
+            }else if(current.getVal() != mn.getVal()){
+                System.out.println("Not the same letter");
+                return false;
+            }else{
+                System.out.println("Invalid");
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public MazeNode getStartNode() {
+        return startNode;
+    }
+
+    public MazeNode getEndNode() {
+        return endNode;
+    }
+
+    public void undoRemove(){
+        pathList.add(lastRemovedIndex,lastRemoved);
+    }
+
     public boolean addNode(MazeNode mn){
-        if(mn == endNode){
+        mn.setVal(pathName);
+        if(mn.getyCoord() == endNode.getyCoord() && mn.getxCoord() == endNode.getxCoord()){
+            System.out.println("Yep" + endNode.getxCoord() + "-" + endNode.getyCoord());
             return false;
         }else{
             pathList.add(mn);
             return true;
         }
     }
+    public MazeNode getLastNode(){
+        if(pathList.size() < 1){
+            return startNode;
+        }else{
+            return pathList.get(pathList.size()-1);
+        }
+
+    }
     public void removeLastNode() {
         pathList.remove(pathList.size() - 1);
     }
-    public boolean isInPath(int x,int y){
-        for(MazeNode mn: pathList){
-            if(mn.getxCoord() == x && mn.getyCoord() == y){
+    public void remove(MazeNode mn){
+        for(int x = 0;x<pathList.size();x++){
+            if(pathList.get(x) == mn){
+                lastRemoved = mn;
+                lastRemovedIndex = x;
+                pathList.remove(x);
+                break;
+            }
+        }
+    }
+    public boolean isInPath(MazeNode mn){
+        for(MazeNode mazeNode: pathList){
+            if(mn == mazeNode){
                 return true;
             }
         }
         return false;
     }
-    public MazeNode[] getPathAsArray(){
-        return pathList.toArray(new MazeNode[0]);
+    public ArrayList<MazeNode> getPathAsArray(){
+        return pathList;
     }
 }

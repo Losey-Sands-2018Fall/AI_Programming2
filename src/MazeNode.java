@@ -1,10 +1,17 @@
 public class MazeNode {
     private int xCoord;
     private int yCoord;
-    public MazeNode(int x, int y){
+    private Character val;
+    public MazeNode(int x, int y, Character value){
         xCoord = x;
         yCoord = y;
+        val = value;
     }
+
+    public Character getVal() {
+        return val;
+    }
+
     public int getxCoord() {
         return xCoord;
     }

@@ -18,8 +18,7 @@ public class Node
     //determines if this node has been completed or not
     //eg. no more paths available for this node
     private boolean isCompleted;
-    //for creating new paths.
-    private boolean isChecked;
+
 
     //The parent of this node...not sure if this will still be needed
     private Node parent;
@@ -33,7 +32,6 @@ public class Node
         this.x = x;
         this.y = y;
         this.value = value;
-        isChecked = false;
         neighbors = new ArrayList<>(4);
         isCompleted = false;
     }
@@ -85,11 +83,5 @@ public class Node
 
     public void setCompleted(boolean completed) {
         isCompleted = completed;
-    }
-    public boolean isChecked() {
-    return isChecked;
-    }
-    public void setChecked(boolean checked){
-        isChecked=checked;
     }
 }

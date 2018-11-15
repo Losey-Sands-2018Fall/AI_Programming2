@@ -17,17 +17,18 @@ public class MazePath {
     }
     public boolean canGetToEnd(){
         MazeNode current = startNode;
-        for(MazeNode mn: pathList){
-            if(current.getxCoord()-1 == mn.getxCoord() ^ current.getyCoord() -1 == mn.getyCoord() ^ current.getyCoord() +1 == mn.getyCoord() ^ current.getxCoord()+1 == mn.getxCoord()) {
-                System.out.println("Valid");
-            }else if(current.getVal() != mn.getVal()){
-                System.out.println("Not the same letter");
-                return false;
-            }else{
-                System.out.println("Invalid");
-                return false;
+        //Checking neighbors for end node
+        for(MazeNode lastNodeCheck:current.getNeighbors()) {
+            if (lastNodeCheck == endNode) {
+                return true;
             }
-            current = mn;
+        }
+        for(MazeNode mn: pathList){
+            for(MazeNode lastNodeCheck:mn.getNeighbors()) {
+                if (lastNodeCheck == endNode) {
+                    return true;
+                }
+            }
         }
         //Checking connection to final node
         if(pathList.size() > 0){

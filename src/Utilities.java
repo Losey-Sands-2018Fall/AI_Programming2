@@ -269,5 +269,13 @@ public class Utilities
 
         return result;
     }
+    public int count=0;
+    public static ArrayList<Grid> test = new ArrayList<Grid>();
+
+    public static void paths(Grid grid) {
+        //copy the current state
+//        Grid currentState = new Grid(this);
+        test.add(grid);
+    }
 
 }

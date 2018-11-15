@@ -9,13 +9,16 @@ public class Main
         //
         //Initialize data
         //
+
         System.out.println("Initializing...");
-        ArrayList<String> mapData = Utilities.readFile("test2.txt");
+        ArrayList<String> mapData = Utilities.readFile("test.txt");
         ArrayList<Integer> colors = Utilities.getcolors(mapData);   //TODO: may be useful?
         Grid solvedState = new Grid(mapData);
-
-        solvedState.display();
-
+        Pairs pairs = new Pairs(solvedState,false);
+        Node test = new Node(0,1,79);
+//            solvedState.sameXAxis(solvedState);
+//            solvedState.sameYAxis(solvedState);
+            solvedState.display();
         solve(solvedState);
 
     }
@@ -49,6 +52,9 @@ public class Main
             sleep(2000);
             System.out.println();
             solvedState.display();
+            if (watch.elapsedSeconds()==13){
+                diffsolve();
+            }
         }
 
         System.out.println("\nCompleted: ");
@@ -56,6 +62,9 @@ public class Main
         watch.stop();
         System.out.println("Solved in:");
         watch.displayElapsedTime();
+    }
+    public static void diffsolve(){
+
     }
 
     private static void sleep(int time)
@@ -79,7 +88,6 @@ public class Main
                 Node currentNode = grid.getNodeAt(x, y);
                 int possibleNumberOfMoves = 0;
                 Node movement = null;
-
                 //If node is empty, then no reason to continue
                 if(currentNode.getValue() == Utilities.EMPTY_SPACE)
                     continue;
@@ -130,11 +138,14 @@ public class Main
                     if(sameValueCount == 2)
                         movement.setCompleted(true);
                 }
-
                 //TODO: else we need to perform another method of determining a move
 
             }
         }
+//        Utilities.paths(grid);
+//
+//        for(int i=0 i<)
+//        Utilities.BFS()
     }
 
     //returns true if any cell in the grid is empty

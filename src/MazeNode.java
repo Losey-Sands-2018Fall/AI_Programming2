@@ -44,4 +44,10 @@ public class MazeNode {
     public int getyCoord() {
         return yCoord;
     }
+    public boolean equals(MazeNode mn){
+        if(this.getxCoord() == mn.getxCoord() && this.getyCoord() == mn.getyCoord()){
+            return true;
+        }
+        return false;
+    }
 }

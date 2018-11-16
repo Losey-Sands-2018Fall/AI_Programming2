@@ -357,9 +357,11 @@ public class Grid {
                         continue;
                     if (getValueAt(current.getX(), i) == getValueAt(current.getX(), current.getY())) {
                         if (i < current.getX()) {
-                            setValueAt(current.getX(), i + 1, current.getValue());
-                            current.setCompleted(true);
-                        } else {
+                            if(pathDownClear(grid,current)) {
+                                setValueAt(current.getX(), i + 1, current.getValue());
+                                current.setCompleted(true);
+                            }
+                        } else if(pathDownClear(grid,current)) {
                             for (int j = i; j > current.getX(); j--) {
                                 setValueAt(current.getX(), j, current.getValue());
                                 current.setCompleted(true);
@@ -370,27 +372,116 @@ public class Grid {
             }
         }
     }
+    public boolean pathDownClear(Grid grid,Node current) {
+        int value = current.getValue();
+        if (current.getY() != grid.getHeight()) {
+            for (int i = current.getY() + 1; i < grid.getHeight(); i++) {
+                Node checker = grid.getNodeAt(current.getX(), i);
+                if (checker.getValue() == value || checker.getValue() != Utilities.EMPTY_SPACE) {
+                    if (checker.getValue() == value)
+                        return true;
+                    continue;
+                } else if (current.getY() != 0) {
+                    for (int j = current.getY() - 1; j > 0; j--) {
+                        checker = grid.getNodeAt(current.getX(), j);
+                        if (checker.getValue() == value || checker.getValue() != Utilities.EMPTY_SPACE) {
+                            if (checker.getValue() == value)
+                                return true;
+                            continue;
+                        } else return false;
+                    }
+                }
+            }
 
+        }
+        return false;
+    }
     public void wallPath(Grid grid, List<Integer> wallkeys) {
         for (int y = 0; y < grid.getHeight(); y++) {
             for (int x = 0; x < grid.getWidth(); x++) {
-                Node current =grid.getNodeAt(x,y);
-                if (wallkeys.contains(current.getValue())){
-                    for (int i=current.getX();i<grid.getWidth();i++){
-                        Node testblanks=grid.getNodeAt(x,y);
-                        if (testblanks.getValue()==Utilities.EMPTY_SPACE){
-                            continue;
-                        }
-                        else if (testblanks.getValue()==current.getValue()){
-
-                        }
-                        else {
-                            break;
-                        }
+                Node current = grid.getNodeAt(x, y);
+                if (wallkeys.contains(current.getValue())&&current.isCompleted()==false) {
+                    if(checkIfClearRight(grid, current))
+                    setWallPathRight(grid,current);
                     }
+                }
+            }
+
+        }
+
+    public Boolean checkIfClearRight(Grid grid, Node current) {
+        int value = current.getValue();
+        if (current.getY() == 0) {
+            for (int i = current.getX(); i < grid.getWidth(); i++) {
+                current = grid.getNodeAt(i, 0);
+                if (current.getValue() == Utilities.EMPTY_SPACE || current.getValue() == value)
+                    continue;
+                else return false;
+            }
+        }
+        if (current.getY() == 0) {
+            for (int i = current.getY(); i < grid.getHeight(); i++) {
+                current = grid.getNodeAt(current.getX(), i);
+                if (current.getValue() == Utilities.EMPTY_SPACE || current.getValue() == value) {
+                    if (current.getValue() == value) {
+                        return true;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                else return false;
+            }
+        }
+            if (current.getY()!=grid.getHeight()||current.getY()!=0||current.getY() == grid.getHeight()-1) {
+                for (int i = current.getX(); i > 0; i--) {
+                    current = grid.getNodeAt(i, current.getY());
+                    if (current.getValue() == Utilities.EMPTY_SPACE || current.getValue() == value) {
+                        if (current.getValue() == value)
+                            return true;
+                        setValueAt(current.getX(),current.getY(),value);
+                        current.setCompleted(true);
+                    } else return false;
                 }
 
             }
+        return null;
+        }
+
+    public void setWallPathRight(Grid grid, Node current) {
+        int value = current.getValue();
+        if (current.getY() == 0 && current.getX() < grid.getWidth()) {
+            for (int i = current.getX(); i < grid.getWidth(); i++) {
+                current = grid.getNodeAt(i, 0);
+                if (current.getValue() == Utilities.EMPTY_SPACE|| current.getValue() == value) {
+                    setValueAt(current.getX(), current.getY(), value);
+                    current.setCompleted(true);
+                }
+            }
+        }
+        if (current.getY() == 0) {
+            for (int i = current.getY(); i < grid.getHeight(); i++) {
+                current = grid.getNodeAt(current.getX(), i);
+                if (current.getValue() == Utilities.EMPTY_SPACE || current.getValue() == value) {
+                    setValueAt(current.getX(), current.getY(), value);
+                    current.setCompleted(true);
+                }
+            }
+        }
+            if (current.getY()!=grid.getHeight()||current.getY()!=0||current.getY() == grid.getHeight()-1) {
+                for (int i = current.getX(); i > 0; i--) {
+                    current = grid.getNodeAt(i, current.getY());
+                    if (current.getValue() == Utilities.EMPTY_SPACE || current.getValue() == value) {
+                        if (current.getValue() == value) {
+                            current.setCompleted(true);
+                            return;
+                        }
+                        setValueAt(current.getX(),current.getY(),value);
+                        current.setCompleted(true);
+                }
+
+            }
+
         }
     }
 }

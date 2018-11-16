@@ -11,13 +11,14 @@ public class Main
         //
 
         System.out.println("Initializing...");
-        ArrayList<String> mapData = Utilities.readFile("test.txt");
+        ArrayList<String> mapData = Utilities.readFile("test5.txt");
         ArrayList<Integer> colors = Utilities.getcolors(mapData);   //TODO: may be useful?
         Grid solvedState = new Grid(mapData);
         Pairs pairs = new Pairs(solvedState,false);
-        Node test = new Node(0,1,79);
+
 //            solvedState.sameXAxis(solvedState);
-//            solvedState.sameYAxis(solvedState);
+            solvedState.sameYAxis(solvedState);
+//            solvedState.wallPath(solvedState,pairs.wallPath(solvedState));
             solvedState.display();
         solve(solvedState);
 

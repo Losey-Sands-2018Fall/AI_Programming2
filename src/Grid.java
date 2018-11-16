@@ -331,20 +331,23 @@ public class Grid {
                     if (i == current.getX())
                         continue;
                     if (getValueAt(i, current.getY()) == getValueAt(current.getX(), current.getY())) {
-                        if (i < current.getX()) {
-                            setValueAt(i + 1, current.getY(), current.getValue());
+                        if (i-current.getX()<5) {
+                            for (int j=current.getX();j<i;j++)
+                            setValueAt(j, current.getY(), current.getValue());
                             current.setCompleted(true);
-                        } else {
-                            for (int j = i; j > current.getX(); j--) {
-                                setValueAt(j, current.getY(), current.getValue());
-                                current.setCompleted(true);
-                            }
                         }
+
                     }
+//                        else {
+//                            for (int j = i; j > current.getX(); j--) {
+//                                setValueAt(j, current.getY(), current.getValue());
+//                                current.setCompleted(true);
+//                            }
+                        }
+//                    }
                 }
             }
         }
-    }
 
     public void sameYAxis(Grid grid) {
         for (int y = 0; y < grid.getHeight(); y++) {
@@ -358,7 +361,7 @@ public class Grid {
                     if (getValueAt(current.getX(), i) == getValueAt(current.getX(), current.getY())) {
                         if (i < current.getX()) {
                             if(pathDownClear(grid,current)) {
-                                setValueAt(current.getX(), i + 1, current.getValue());
+                                setValueAt(current.getX(),i + 1, current.getValue());
                                 current.setCompleted(true);
                             }
                         } else if(pathDownClear(grid,current)) {
@@ -377,18 +380,23 @@ public class Grid {
         if (current.getY() != grid.getHeight()) {
             for (int i = current.getY() + 1; i < grid.getHeight(); i++) {
                 Node checker = grid.getNodeAt(current.getX(), i);
-                if (checker.getValue() == value || checker.getValue() != Utilities.EMPTY_SPACE) {
-                    if (checker.getValue() == value)
+                if (checker.getValue() == value || checker.getValue() == Utilities.EMPTY_SPACE) {
+                    if (checker.getValue() == value) {
+                        checker.setCompleted(true);
                         return true;
+                    }
                     continue;
                 } else if (current.getY() != 0) {
                     for (int j = current.getY() - 1; j > 0; j--) {
                         checker = grid.getNodeAt(current.getX(), j);
-                        if (checker.getValue() == value || checker.getValue() != Utilities.EMPTY_SPACE) {
-                            if (checker.getValue() == value)
+                        if (checker.getValue() == value || checker.getValue() == Utilities.EMPTY_SPACE) {
+                            if (checker.getValue() == value) {
+                                checker.setCompleted(true);
                                 return true;
+                            }
                             continue;
-                        } else return false;
+                        }
+                         else return false;
                     }
                 }
             }
@@ -396,6 +404,8 @@ public class Grid {
         }
         return false;
     }
+
+
     public void wallPath(Grid grid, List<Integer> wallkeys) {
         for (int y = 0; y < grid.getHeight(); y++) {
             for (int x = 0; x < grid.getWidth(); x++) {
@@ -445,7 +455,7 @@ public class Grid {
                 }
 
             }
-        return null;
+        return false;
         }
 
     public void setWallPathRight(Grid grid, Node current) {

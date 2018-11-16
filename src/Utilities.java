@@ -273,9 +273,24 @@ public class Utilities
     public static ArrayList<Grid> test = new ArrayList<Grid>();
 
     public static void paths(Grid grid) {
-        //copy the current state
-//        Grid currentState = new Grid(this);
         test.add(grid);
-    }
-
-}
+        int value=0;
+        Pairs pairs= new Pairs(grid,false);
+        Node start =grid.getNodeAt(0,0);
+        for (int y =grid.getHeight()-1; y>0; y--) {
+            for (int x = grid.getWidth()-1; x >0; x--) {
+                Node current=grid.getNodeAt(x,y);
+                if(current.isCompleted() || current.getValue()==Utilities.EMPTY_SPACE)
+                    continue;
+                else{
+//                    value=current.getValue();
+//                    if(value!=0){
+//                        if(value==current.getValue()){
+                            BFS(current,pairs.getStart(current.getValue()));
+                        }
+                    }
+                }
+            }
+        }
+//    }
+//}

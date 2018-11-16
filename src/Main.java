@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 public class Main
 {
+    static int count=0;
+
     public static void main(String args[]) throws IOException
     {
         //
@@ -15,12 +17,12 @@ public class Main
         ArrayList<Integer> colors = Utilities.getcolors(mapData);   //TODO: may be useful?
         Grid solvedState = new Grid(mapData);
         Pairs pairs = new Pairs(solvedState,false);
-
-//            solvedState.sameXAxis(solvedState);
+//            pairs.getEnd(67);
+            solvedState.sameXAxis(solvedState);
             solvedState.sameYAxis(solvedState);
-//            solvedState.wallPath(solvedState,pairs.wallPath(solvedState));
+            solvedState.wallPath(solvedState,pairs.wallPath(solvedState));
             solvedState.display();
-        solve(solvedState);
+            solve(solvedState);
 
     }
 
@@ -34,11 +36,11 @@ public class Main
         int filledCount = 0;
 
         //while (filledCount != grid.getHeight() * grid.getWidth())
-
-        while (isFilled(solvedState) == false)
+//        isFilled(solvedState) == false
+        while (count<3||isFilled(solvedState) == false)
         {
 
-            while (true)
+            while (count<10)
             {
                 Grid previousState = new Grid(solvedState);
                 forceMove(solvedState);
@@ -53,19 +55,23 @@ public class Main
             sleep(2000);
             System.out.println();
             solvedState.display();
-            if (watch.elapsedSeconds()==13){
-                diffsolve();
-            }
+            count++;
         }
-
+        if(count==3)
+        {
+            solvedState.sameXAxis(solvedState);
+            forceMove(solvedState);
+//            Utilities.paths(solvedState);
+        }
         System.out.println("\nCompleted: ");
         solvedState.display();
         watch.stop();
         System.out.println("Solved in:");
         watch.displayElapsedTime();
+
     }
     public static void diffsolve(){
-
+        System.out.println("yes");
     }
 
     private static void sleep(int time)
@@ -81,6 +87,10 @@ public class Main
 
     private static void forceMove(Grid grid)
     {
+        if (count==3){
+            count=0;
+            solve(grid);
+        }
         //Update the grid
         for (int y = 0; y < grid.getHeight(); y++)
         {
@@ -140,14 +150,15 @@ public class Main
                         movement.setCompleted(true);
                 }
                 //TODO: else we need to perform another method of determining a move
+                }
 
-            }
         }
+
+    }
 //        Utilities.paths(grid);
 //
 //        for(int i=0 i<)
 //        Utilities.BFS()
-    }
 
     //returns true if any cell in the grid is empty
     public static boolean isFilled(Grid grid)

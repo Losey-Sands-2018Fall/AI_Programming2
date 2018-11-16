@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main
 {
@@ -11,15 +12,17 @@ public class Main
         //
         //Initialize data
         //
+        Scanner scanner= new Scanner(System.in);
 
         System.out.println("Initializing...");
-        ArrayList<String> mapData = Utilities.readFile("test5.txt");
+        System.out.println("what Maze?");
+        ArrayList<String> mapData = Utilities.readFile(scanner.nextLine());
         ArrayList<Integer> colors = Utilities.getcolors(mapData);   //TODO: may be useful?
         Grid solvedState = new Grid(mapData);
         Pairs pairs= new Pairs(solvedState,false);
             solvedState.display();
         solvedState.sameXAxis(solvedState);
-        solvedState.sameYAxis(solvedState);
+//        solvedState.sameYAxis(solvedState);
         solvedState.wallPath(solvedState,pairs.wallPath(solvedState));
             solve(solvedState);
 
@@ -54,8 +57,8 @@ public class Main
 
             solvedState.fillRegions();
 
-            System.out.println("Main::solve(Grid) - sleeping for 2 sec");
-            sleep(2000);
+//            System.out.println("Main::solve(Grid) - sleeping for 2 sec");
+//            sleep(2000);
             System.out.println();
             solvedState.display();
             count++;

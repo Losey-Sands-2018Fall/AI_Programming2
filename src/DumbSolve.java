@@ -17,39 +17,36 @@ public class DumbSolve implements SolveMethod{
             System.out.println(k + "end" + maze_nodes.get(k).get(1).getxCoord() + "-" + maze_nodes.get(k).get(1).getyCoord());
             maze_paths.add(mp);
         }
-            int trying = 0;
-            while (trying < 100) {
-                for (MazePath currentPath : maze_paths) {
-                    trying++;
-                    if(currentPath.canGetToEnd()){
-                        m.printNodes();
-                        continue;
-                    }
-                    MazeNode lastNode = currentPath.getLastNode();
-                    int random = (int)(Math.random()*lastNode.getNeighbors().size());
-                    MazeNode choice = lastNode.getNeighbors().get(random);
-                        if (!choice.isProtected()) {
-                            if(!currentPath.isInPath(choice)){
-                                currentPath.addNode(choice);
-                                continue;
+        int trying = 0;
+        while (trying < 100) {
+            for (MazePath currentPath : maze_paths) {
+                trying++;
+                MazeNode lastNode = currentPath.getLastNode();
+                if (currentPath.canGetToEnd()) {
+                    System.out.println("Broke");
+                    break;
+                }
+                int random = (int)(Math.random()*lastNode.getNeighbors().size());
+                MazeNode choice = lastNode.getNeighbors().get(random);
+                if (!choice.isProtected()) {
+                    if (!currentPath.isInPath(choice)) {
+                        for (MazePath testPath : maze_paths) {
+                            if (testPath.isInPath(choice)) {
+                                testPath.remove(choice);
                             }
                         }
-                    System.out.println();
-                    m.printNodes();
-                    if (currentPath.canGetToEnd()) {
-                        System.out.println("Broke");
-                        break;
-                    }
-
-                }
-                System.out.println();
-                int canGetToEnd = 0;
-                for (MazePath currentPath : maze_paths) {
-                    if (currentPath.canGetToEnd()){
-                        canGetToEnd++;
+                        currentPath.addNode(choice);
                     }
                 }
-                System.out.println(canGetToEnd);
             }
+            int canGetToEnd = 0;
+            for (MazePath currentPath : maze_paths) {
+                if (currentPath.canGetToEnd()){
+                    canGetToEnd++;
+                }
+            }
+            m.printNodes();
+            System.out.println(canGetToEnd);
+        }
     }
 }

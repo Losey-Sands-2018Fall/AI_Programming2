@@ -6,8 +6,6 @@ public class MazePath {
     private MazeNode startNode;
     private MazeNode endNode;
     private MazeNode lastAdded;
-    private MazeNode lastRemoved;
-    private int lastRemovedIndex;
     public MazePath(Character pathName, MazeNode end, MazeNode start){
         startNode = start;
         endNode = end;
@@ -20,22 +18,21 @@ public class MazePath {
         lastAdded = start;
     }
     public boolean canGetToEnd(){
-        boolean bad = false;
-        for(int x = 0;x<pathList.size()-1;x++){
+        int good = 0;
+        for(int x =0;x<pathList.size()-1;x++){
             MazeNode current = pathList.get(x);
-            for(int y = 0;y<current.getNeighbors().size();y++){
-                if(!pathList.get(x+1).equals(current.getNeighbors().get(y))){
-                    bad = true;
+            MazeNode next = pathList.get(x+1);
+            for(MazeNode neighbor: current.getNeighbors()){
+                if(next.equals(neighbor)){
+                    good++;
                 }
             }
         }
-        System.out.println(bad);
+        System.out.println(good);
         System.out.println(pathList.size());
-        if(!bad){
+        if(good == pathList.size()-1){
             System.out.println("TRUE!!! with " + pathName);
             return true;
-        }else{
-
         }
         return false;
     }
@@ -65,9 +62,6 @@ public class MazePath {
     public void remove(MazeNode mn){
         for(int x = 0;x<pathList.size();x++){
             if(pathList.get(x).equals(mn)){
-                if(!mn.isProtected())pathList.get(x).setVal('_');
-                lastRemoved = mn;
-                lastRemovedIndex = x;
                 pathList.remove(x);
                 break;
             }

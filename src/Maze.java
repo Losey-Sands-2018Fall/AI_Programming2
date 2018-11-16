@@ -25,7 +25,6 @@ public class Maze {
                     }
                 }
             }
-
         }
     }
     private void makeNeighbors(){
@@ -76,6 +75,20 @@ public class Maze {
             }
             System.out.println();
         }
+    }
+    public boolean isSolved(){
+        for(int x = 0;x<mazeNodes.length;x++){
+            for(int y = 0;y<mazeNodes.length;y++){
+                if(mazeNodes[x][y].getVal() == '_'){
+                    return false;
+                }else if(mazeNodes[x][y].isProtected()){
+
+                }
+            }
+        }
+    }
+    private boolean isPathValid(){
+        
     }
     public Character[][] getRawMaze() {
         return rawMaze;

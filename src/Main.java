@@ -13,11 +13,12 @@ public class Main
         //
 
         System.out.println("Initializing...");
-        ArrayList<String> mapData = Utilities.readFile("test5.txt");
+        ArrayList<String> mapData = Utilities.readFile("test4.txt");
         ArrayList<Integer> colors = Utilities.getcolors(mapData);   //TODO: may be useful?
         Grid solvedState = new Grid(mapData);
         Pairs pairs = new Pairs(solvedState,false);
 //            pairs.getEnd(67);
+//        solvedState.setValueAt(0,0,80);
             solvedState.sameXAxis(solvedState);
             solvedState.sameYAxis(solvedState);
             solvedState.wallPath(solvedState,pairs.wallPath(solvedState));
@@ -37,15 +38,19 @@ public class Main
 
         //while (filledCount != grid.getHeight() * grid.getWidth())
 //        isFilled(solvedState) == false
-        while (count<3||isFilled(solvedState) == false)
+//        ||isFilled(solvedState) == false
+        while (count<3)
         {
-
+            if (isFilled(solvedState))
+                break;
             while (count<10)
             {
                 Grid previousState = new Grid(solvedState);
                 forceMove(solvedState);
 
                 if(previousState.equal(solvedState))
+                    break;
+                if (isFilled(solvedState))
                     break;
             }
 
@@ -59,9 +64,13 @@ public class Main
         }
         if(count==3)
         {
+
             solvedState.sameXAxis(solvedState);
+            solvedState=Utilities.paths(solvedState);
+            solvedState=Utilities.paths(solvedState);
             forceMove(solvedState);
-//            Utilities.paths(solvedState);
+            solvedState.display();
+
         }
         System.out.println("\nCompleted: ");
         solvedState.display();
@@ -87,10 +96,12 @@ public class Main
 
     private static void forceMove(Grid grid)
     {
-        if (count==3){
+        if (count==3)
+        {
             count=0;
             solve(grid);
         }
+
         //Update the grid
         for (int y = 0; y < grid.getHeight(); y++)
         {

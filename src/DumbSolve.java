@@ -20,40 +20,35 @@ public class DumbSolve implements SolveMethod{
             }
         }
         characters.remove(characters.size()-2);//removes underscore, probably a better way to do this
-        for(Character ch:characters){
-            System.out.println(ch);
-            MazePath currentPath = maze_paths.get(ch);
-            MazeNode currentNode = currentPath.getLastNode();
-            int count = 0;
-            letterPathDone:
-            while(count<300) {
-                count++;
-                //If we find the endpoint, we finished this character
-                for (MazeNode mn : currentNode.getNeighbors()) {
-                    if (mn.getxCoord() == currentPath.getEndNode().getxCoord() && mn.getyCoord() == currentPath.getEndNode().getyCoord()) {
-                        break letterPathDone;
-                    }
-                }
-                //If we dont, we pick a spot
-                for (MazeNode mn : currentNode.getNeighbors()) {
-                    if (mn.getVal().equals('_')) {
-                        currentPath.addNode(mn);
-                        currentNode = currentPath.getLastNode();
-                    } else if (!mn.getVal().equals('_') && !mn.isProtected()) {
-                        //take but then check if the other path is still valid
-                        Character replacing = mn.getVal();
-                        currentPath.addNode(mn);
-                        maze_paths.get(replacing).remove(mn);
-                        if(!maze_paths.get(replacing).canGetToEnd()){
-                            currentPath.removeLastNode();
-                            maze_paths.get(replacing).undoRemove();
-                            mn.setVal(mn.getLastVal());
-                            System.out.println("Unsafe assignment, stepping back");
+        int count = 0;
+        while(count < 5){
+            for(Character ch:characters){
+                MazePath currentPath = maze_paths.get(ch);
+                complete:
+                while(true){
+                    MazeNode currentNode = currentPath.getLastNode();
+                    int rand = (int)(Math.random()*currentNode.getNeighbors().size());
+                    MazeNode testNode = currentNode.getNeighbors().get(rand);
+                    for(MazeNode mn : testNode.getNeighbors()){
+                        if(!(mn.getxCoord() == currentPath.getEndNode().getxCoord())){
+                            if(!mn.isProtected()){
+                                currentPath.addNode(testNode);
+                            }
+                        }else{
+                            break complete;
                         }
-                        currentNode = currentPath.getLastNode();
                     }
                 }
             }
+            int goodCount = 0;
+            for(Character ch:characters){
+                if(maze_paths.get(ch).canGetToEnd()){
+                    goodCount++;
+                }
+            }
+            count++;
+            System.out.println(goodCount);
         }
+
     }
 }

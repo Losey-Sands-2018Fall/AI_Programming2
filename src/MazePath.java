@@ -10,10 +10,13 @@ public class MazePath {
     public MazePath(Character pathName, MazeNode end, MazeNode start){
         startNode = start;
         endNode = end;
-        start.setProtected(true);
+        startNode.setProtected(true);
         endNode.setProtected(true);
         this.pathName = pathName;
         pathList = new ArrayList<>();
+    }
+    public void resetPath(){
+        pathList.clear();
     }
     public boolean canGetToEnd(){
         MazeNode current = startNode;
@@ -29,12 +32,22 @@ public class MazePath {
                     return true;
                 }
             }
+            if(current.getxCoord()-1 == mn.getxCoord() ^ current.getyCoord() -1 == mn.getyCoord() ^ current.getyCoord() +1 == mn.getyCoord() ^ current.getxCoord()+1 == mn.getxCoord()) {
+                System.out.println("Valid");
+            }else if(current.getVal() != mn.getVal()){
+                System.out.println("Not the same letter");
+                return false;
+            }else{
+                System.out.println("Invalid");
+                return false;
+            }
+            current = mn;
         }
         //Checking connection to final node
         if(pathList.size() > 0){
             current = endNode;
             MazeNode mn = pathList.get(pathList.size()-1);
-            if(current.getxCoord()-1 == mn.getxCoord() ^ current.getyCoord() -1 == mn.getyCoord() ^ current.getyCoord() +1 == mn.getyCoord() ^ current.getxCoord()-1 == mn.getxCoord()) {
+            if(current.getxCoord()-1 == mn.getxCoord() ^ current.getyCoord() -1 == mn.getyCoord() ^ current.getyCoord() +1 == mn.getyCoord() ^ current.getxCoord()+1 == mn.getxCoord()) {
                 System.out.println("Valid");
             }else if(current.getVal() != mn.getVal()){
                 System.out.println("Not the same letter");
@@ -61,6 +74,9 @@ public class MazePath {
 
     public boolean addNode(MazeNode mn){
         mn.setVal(pathName);
+        if(mn.isProtected()){
+            return false;
+        }
         if(mn.getyCoord() == endNode.getyCoord() && mn.getxCoord() == endNode.getxCoord()){
             System.out.println("Yep" + endNode.getxCoord() + "-" + endNode.getyCoord());
             return false;

@@ -7,6 +7,7 @@ public class MazeNode {
     private Character val;
     private boolean isProtected;
     private Character lastVal;
+    private MazeNode parent;
     public MazeNode(int x, int y, Character value){
         xCoord = x;
         yCoord = y;
@@ -36,6 +37,14 @@ public class MazeNode {
     }
     public Character getLastVal(){
         return lastVal;
+    }
+
+    public MazeNode getParent() {
+        return parent;
+    }
+
+    public void setParent(MazeNode parent) {
+        this.parent = parent;
     }
 
     public int getxCoord() {

@@ -17,36 +17,47 @@ public class DumbSolve implements SolveMethod{
             System.out.println(k + "end" + maze_nodes.get(k).get(1).getxCoord() + "-" + maze_nodes.get(k).get(1).getyCoord());
             maze_paths.add(mp);
         }
-        int trying = 0;
-        while (trying < 100) {
-            for (MazePath currentPath : maze_paths) {
-                trying++;
-                MazeNode lastNode = currentPath.getLastNode();
-                if (currentPath.canGetToEnd()) {
-                    System.out.println("Broke");
-                    break;
-                }
-                int random = (int)(Math.random()*lastNode.getNeighbors().size());
-                MazeNode choice = lastNode.getNeighbors().get(random);
-                if (!choice.isProtected()) {
-                    if (!currentPath.isInPath(choice)) {
-                        for (MazePath testPath : maze_paths) {
-                            if (testPath.isInPath(choice)) {
-                                testPath.remove(choice);
+        boolean solved = false;
+        while(!solved){
+            for(MazePath currentPath :maze_paths){
+                outer:
+                while(true){
+                    for(MazeNode endTest :currentPath.getEndNode().getNeighbors()){
+                        if(currentPath.getLastNode().equals(endTest)){
+                            System.out.println("Found end");
+                            m.printNodes();
+                            System.out.println();
+                            break outer;
+                        }
+                    }
+                    int random = (int)(Math.random()*currentPath.getLastNode().getNeighbors().size());
+                    MazeNode randomPick = currentPath.getLastNode().getNeighbors().get(random);
+                    if(!randomPick.isProtected()){
+                        for(MazePath testingPath :maze_paths){
+                            if(testingPath.isInPath(randomPick)){
+                                testingPath.remove(randomPick);
                             }
                         }
-                        currentPath.addNode(choice);
+                        currentPath.addNode(randomPick);
                     }
                 }
             }
-            int canGetToEnd = 0;
-            for (MazePath currentPath : maze_paths) {
-                if (currentPath.canGetToEnd()){
-                    canGetToEnd++;
+            int count = 0;
+            for(MazePath currentPath :maze_paths){
+                if(currentPath.canGetToEnd()){
+                    count++;
                 }
             }
-            m.printNodes();
-            System.out.println(canGetToEnd);
+            if(count == maze_paths.size()){
+                solved = true;
+            }else{
+                for(MazePath currentPath :maze_paths) {
+                    currentPath.resetPath();
+                    System.out.println("Path Reset");
+                }
+            }
+            System.out.println(count);
         }
+
     }
 }

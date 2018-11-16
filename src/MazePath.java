@@ -19,19 +19,19 @@ public class MazePath {
     }
     public boolean canGetToEnd(){
         int good = 0;
-        for(int x =0;x<pathList.size()-1;x++){
+        for(int x=0;x<pathList.size()-1;x++){
             MazeNode current = pathList.get(x);
             MazeNode next = pathList.get(x+1);
             for(MazeNode neighbor: current.getNeighbors()){
                 if(next.equals(neighbor)){
                     good++;
+                    break;
                 }
             }
         }
         System.out.println(good);
         System.out.println(pathList.size());
-        if(good == pathList.size()-1){
-            System.out.println("TRUE!!! with " + pathName);
+        if(good  == pathList.size()-1){
             return true;
         }
         return false;
@@ -56,12 +56,14 @@ public class MazePath {
         for(int x = 0;x<pathList.size();x++){
             pathList.remove(0);
         }
+        lastAdded = startNode;
         pathList.add(startNode);
         pathList.add(endNode);
     }
     public void remove(MazeNode mn){
         for(int x = 0;x<pathList.size();x++){
             if(pathList.get(x).equals(mn)){
+                pathList.get(x).setVal('_');
                 pathList.remove(x);
                 break;
             }
@@ -69,7 +71,7 @@ public class MazePath {
     }
     public boolean isInPath(MazeNode mn){
         for(MazeNode mazeNode: pathList){
-            if(mn.getxCoord() == mazeNode.getxCoord() && mn.getyCoord() == mazeNode.getyCoord()){
+            if(mazeNode.equals(mn)){
                 return true;
             }
         }

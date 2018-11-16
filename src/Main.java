@@ -13,16 +13,14 @@ public class Main
         //
 
         System.out.println("Initializing...");
-        ArrayList<String> mapData = Utilities.readFile("test4.txt");
+        ArrayList<String> mapData = Utilities.readFile("test5.txt");
         ArrayList<Integer> colors = Utilities.getcolors(mapData);   //TODO: may be useful?
         Grid solvedState = new Grid(mapData);
-        Pairs pairs = new Pairs(solvedState,false);
-//            pairs.getEnd(67);
-//        solvedState.setValueAt(0,0,80);
-            solvedState.sameXAxis(solvedState);
-            solvedState.sameYAxis(solvedState);
-            solvedState.wallPath(solvedState,pairs.wallPath(solvedState));
+        Pairs pairs= new Pairs(solvedState,false);
             solvedState.display();
+        solvedState.sameXAxis(solvedState);
+        solvedState.sameYAxis(solvedState);
+        solvedState.wallPath(solvedState,pairs.wallPath(solvedState));
             solve(solvedState);
 
     }
@@ -62,15 +60,15 @@ public class Main
             solvedState.display();
             count++;
         }
+        //if it attempts forced moves for 3 counts try new methods.
         if(count==3)
         {
-
             solvedState.sameXAxis(solvedState);
+            //does a BFS from node in bottom corner.
             solvedState=Utilities.paths(solvedState);
             solvedState=Utilities.paths(solvedState);
             forceMove(solvedState);
             solvedState.display();
-
         }
         System.out.println("\nCompleted: ");
         solvedState.display();
